@@ -66,13 +66,15 @@ function galleryHandler(event) {
 
   lightBoxRef.classList.add('is-open');
   
-  indexOfActivImg = event.target.dataset.index;
+  indexOfActivImg = Number(event.target.dataset.index);
 
   lightBoxImgRef.src = event.target.dataset.source;  
 
   lightBoxCloseBtnRef.addEventListener('click', closeGalleryItem);
   lightBoxCloseByOverlayRef.addEventListener('click', closeGalleryItem);
   document.addEventListener('keydown', closeGalleryByEsc);
+  document.addEventListener('keydown', scrollToRight);
+  document.addEventListener('keydown', scrollToLeft);
 };
 
 function closeGalleryItem() {
@@ -81,44 +83,6 @@ function closeGalleryItem() {
 };
 
 function closeGalleryByEsc(event) {
-
-  const galleryItemsQuantity = arrOfImagesRef.length;
-
-  if (event.code === "ArrowRight") {
-
-    for (let i = 0; i < galleryItemsQuantity; i += 1) {
-
-      if (Number(indexOfActivImg) === galleryItemsQuantity - 1) {
-        lightBoxImgRef.src = arrOfImagesRef[galleryItemsQuantity - 1].dataset.source;
-        break;
-      }
-
-      if (arrOfImagesRef[i].dataset.index === indexOfActivImg) {
-        const nextImage = arrOfImagesRef[i + 1];
-        lightBoxImgRef.src = nextImage.dataset.source;
-        indexOfActivImg = nextImage.dataset.index;
-        break;
-      }
-    }
-  };
-
-  
-  if (event.code === "ArrowLeft") {
-    for (let i = 0; i < galleryItemsQuantity; i += 1) {
-
-      if (Number(indexOfActivImg) === 0) {
-        lightBoxImgRef.src = arrOfImagesRef[i].dataset.source;
-        break;
-      }
-
-      if (arrOfImagesRef[i].dataset.index === indexOfActivImg) {
-        const nextImage = arrOfImagesRef[i - 1];
-        lightBoxImgRef.src = nextImage.dataset.source;
-        indexOfActivImg = nextImage.dataset.index;
-        break;
-      }
-    };
-  };
   
   if (event.code === 'Escape') {
     lightBoxRef.classList.remove('is-open');
@@ -126,4 +90,67 @@ function closeGalleryByEsc(event) {
 
     document.removeEventListener('keydown', closeGalleryByEsc);
   } 
+};
+
+function scrollToRight(event) {
+
+  // Вар 1 первоначальный
+
+  //  if (event.code === "ArrowRight") {
+  //   for (let i = 0; i < arrOfImagesRef.length; i += 1) {
+  //     if (Number(indexOfActivImg) === arrOfImagesRef.length - 1) {
+  //       lightBoxImgRef.src = arrOfImagesRef[arrOfImagesRef.length - 1].dataset.source;
+  //       break;
+  //     }
+
+  //     if (arrOfImagesRef[i].dataset.index === indexOfActivImg) {
+  //       const nextImage = arrOfImagesRef[i + 1];
+  //       lightBoxImgRef.src = nextImage.dataset.source;
+  //       indexOfActivImg = nextImage.dataset.index;
+  //       break;
+  //     }
+  //   }
+  // };
+
+  // Вар 2 упрощённый
+
+  if (event.code === "ArrowRight") {
+    if (indexOfActivImg === arrOfImagesRef.length - 1) {
+      return;
+    }
+    indexOfActivImg += 1;
+    lightBoxImgRef.src = arrOfImagesRef[indexOfActivImg].dataset.source;
+  };
+};
+
+function scrollToLeft(event) {
+
+  // Вар 1 первоначальный
+
+  // if (event.code === "ArrowLeft") {
+  //   for (let i = 0; i < arrOfImagesRef.length; i += 1) {
+
+  //     if (Number(indexOfActivImg) === 0) {
+  //       lightBoxImgRef.src = arrOfImagesRef[i].dataset.source;
+  //       break;
+  //     }
+
+  //     if (arrOfImagesRef[i].dataset.index === indexOfActivImg) {
+  //       const nextImage = arrOfImagesRef[i - 1];
+  //       lightBoxImgRef.src = nextImage.dataset.source;
+  //       indexOfActivImg = nextImage.dataset.index;
+  //       break;
+  //     }
+  //   };
+  // };
+
+  // Вар 2 упрощённый
+
+  if (event.code === "ArrowLeft") {
+    if (indexOfActivImg === 0) {
+      return;
+    }
+    indexOfActivImg -= 1;
+    lightBoxImgRef.src = arrOfImagesRef[indexOfActivImg].dataset.source;
+  };
 };
