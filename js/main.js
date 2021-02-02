@@ -70,7 +70,7 @@ function galleryHandler(event) {
 
   lightBoxImgRef.src = event.target.dataset.source;  
 
-  lightBoxRef.addEventListener('click', closeGallery);
+  lightBoxRef.addEventListener('click', closeGalleryByClick);
   document.addEventListener('keydown', closeGalleryByEsc);
   document.addEventListener('keydown', scrollToRight);
   document.addEventListener('keydown', scrollToLeft);
@@ -141,14 +141,18 @@ function scrollToLeft(event) {
   };
 };
 
-function closeGallery(event) {
-  if (event.target.classList.contains('lightbox__image')) return;
+function closeGallery() {
   lightBoxRef.classList.remove('is-open');
   lightBoxImgRef.src = '';
 
   document.removeEventListener('keydown', closeGalleryByEsc);
   document.addEventListener('keydown', scrollToRight);
   document.addEventListener('keydown', scrollToLeft);
+};
+
+function closeGalleryByClick(event) {
+  if (event.target.classList.contains('lightbox__image')) return;
+  closeGallery()
 };
 
 function closeGalleryByEsc(event) {
