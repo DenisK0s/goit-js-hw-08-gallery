@@ -70,29 +70,15 @@ function galleryHandler(event) {
 
   lightBoxImgRef.src = event.target.dataset.source;  
 
-  lightBoxCloseBtnRef.addEventListener('click', closeGalleryItem);
-  lightBoxCloseByOverlayRef.addEventListener('click', closeGalleryItem);
+  lightBoxRef.addEventListener('click', closeGallery);
   document.addEventListener('keydown', closeGalleryByEsc);
   document.addEventListener('keydown', scrollToRight);
   document.addEventListener('keydown', scrollToLeft);
 };
 
-function closeGalleryItem() {
-  lightBoxRef.classList.remove('is-open');
-  lightBoxImgRef.src = ''; 
-};
-
-function closeGalleryByEsc(event) {
-  
-  if (event.code === 'Escape') {
-    lightBoxRef.classList.remove('is-open');
-    lightBoxImgRef.src = '';
-
-    document.removeEventListener('keydown', closeGalleryByEsc);
-  } 
-};
-
 function scrollToRight(event) {
+
+  console.log(event);
 
   // Вар 1 первоначальный
 
@@ -153,4 +139,20 @@ function scrollToLeft(event) {
     indexOfActivImg -= 1;
     lightBoxImgRef.src = arrOfImagesRef[indexOfActivImg].dataset.source;
   };
+};
+
+function closeGallery(event) {
+  if (event.target.classList.contains('lightbox__image')) return;
+  lightBoxRef.classList.remove('is-open');
+  lightBoxImgRef.src = '';
+
+  document.removeEventListener('keydown', closeGalleryByEsc);
+  document.addEventListener('keydown', scrollToRight);
+  document.addEventListener('keydown', scrollToLeft);
+};
+
+function closeGalleryByEsc(event) {
+  if (event.code === 'Escape') {
+    closeGallery();
+  }
 };
